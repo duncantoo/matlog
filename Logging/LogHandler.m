@@ -8,8 +8,6 @@ classdef (Abstract) LogHandler < handle
     end
     properties(Constant)
         DEFAULTLEVEL = LogLevel.ALL
-        DEFAULTFORMAT = "%(level)s: %(asctime)s: %(name)s: %(message)s"
-        DEFAULTDATEFMT = "yyyy-MM-dd HH:mm:ss.SSS"
     end
     properties (SetAccess=private)
         formatFn
@@ -25,8 +23,8 @@ classdef (Abstract) LogHandler < handle
         function obj = LogHandler(options)
             arguments
                 options.level (1,1) LogLevel = LogHandler.DEFAULTLEVEL
-                options.format (1,1) string = LogHandler.DEFAULTFORMAT
-                options.datetimeFormat (1,1) string = LogHandler.DEFAULTDATEFMT
+                options.format (1,1) string = logging.DEFAULTFORMAT
+                options.datetimeFormat (1,1) string = logging.DEFAULTDATEFMT
             end
             obj.level = options.level;
             obj.format = options.format;

@@ -16,7 +16,6 @@ classdef TestFileHandler < matlab.unittest.TestCase
     methods(TestMethodSetup)
         % Setup for each test
         function fetchdir(obj)
-            obj.dir = tempdir;
             obj.filepath = tempname;
         end
     end
@@ -57,7 +56,7 @@ classdef TestFileHandler < matlab.unittest.TestCase
         end
 
         function testLevelFilter(testCase)
-            logger = Logger.getLogger();
+            logger = logging.getLogger();
             logger.level = LogLevel.ALL;
             handler = FileHandler(testCase.filepath, 'level', 'WARN');
             logger.addhandler(handler);

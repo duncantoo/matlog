@@ -11,12 +11,13 @@ classdef Logger < handle
         level
     end
 
-    properties (SetAccess = protected)
+    properties (SetAccess = {?logging})
         parent
-        active = false;
     end
 
-    methods (Access = protected)
+    %% Constructor
+    % logging class is responsible for creating loggers.
+    methods (Access = {?logging})
         function obj = Logger(name, parent, handlers, level)
             arguments
                 name (1,1) string
@@ -28,9 +29,10 @@ classdef Logger < handle
             obj.parent = parent;
             obj.handlers = handlers;
             obj.level = level;
-            obj.active = true;
         end
-
+    end
+    %%
+    methods (Access = protected)
         function addmsg(obj, level, msg, varargin)
             arguments
                 obj
@@ -57,68 +59,11 @@ classdef Logger < handle
         end
     end
 
-    methods(Static)
-        function obj = getLogger(name)
-            %GETLOGGER make a new logger or return an existing logger
-            % Return existing logger if one already exists.
-            arguments
-                name (1,1) string = ""
-            end
-            persistent loggers;
-            if isempty(loggers)
-                loggers = containers.Map;
-                loggers("") = Logger("root", missing, [], LogLevel.WARN);
-            end
-            if ismember(name, keys(loggers))
-                obj = loggers(name);
-            else
-                % Construct a new logger and track it for anyone who needs
-                % access to the logger again. Also reset parent linking in
-                % case it is parent to any pre-existing loggers.
-                obj = Logger(name, missing, [], missing);
-                loggers(name) = obj;
-                names = string(keys(loggers));
-                iParents = obj.findParents(names, names);
-                for iChild = 1:length(loggers)
-                    iParent = iParents(iChild);
-                    if isnan(iParent)
-                        continue
-                    end
-                    child = loggers(names(iChild));
-                    parent = loggers(names(iParent));
-                    child.parent = parent;
-                end
-            end
-        end
-
-        function iParent = findParents(children, parents)
-            %FINDPARENTS return the index of the parent to each child, or NaN.
-            % We match grandparents and older generations if no exact parent
-            % exists.
-            arguments
-                children (:,1) string
-                parents (1,:) string
-            end
-            % Every parent must form the start of its child.
-            % We may pick up some grand-parents etc. or siblings with different
-            % stems.
-            parentFilter = arrayfun(@(p) children.startsWith(p), parents, 'UniformOutput', false);
-            parentFilter = cat(2, parentFilter{:});
-            % Filter out siblings by checking number of levels.
-            % We treat the empty string differently, having 0 levels.
-            ncLevels = count(children, ".") + (strlength(children) > 0);
-            npLevels = count(parents, ".") + (strlength(parents) > 0);
-            % Valid parents will have a smaller number of levels.
-            parentFilter = parentFilter & (ncLevels > npLevels);
-            % Filter out older generations by picking the match with the
-            % highest number of levels.
-            parentScore = parentFilter .* (1 + npLevels);
-            [score, iParent] = max(parentScore, [], 2);
-            iParent(score == 0) = missing;
-        end
-    end
-
     methods
+        function obj = close(obj)
+            obj.handlers = {};
+        end
+
         function addhandler(obj, handler)
             arguments
                 obj
