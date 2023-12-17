@@ -6,24 +6,29 @@ classdef (Abstract) LogHandler < handle
         level
         datetimeFormat
     end
+    properties(Constant)
+        DEFAULTLEVEL = LogLevel.ALL
+    end
+    properties (SetAccess=private)
+        formatFn
+    end
     properties (Access=private)
         format_
-        formatFn
     end
     properties (Dependent)
         format
     end
     
     methods
-        function obj = LogHandler(level, format, datetimeFormat)
+        function obj = LogHandler(options)
             arguments
-                level (1,1) LogLevel
-                format (1,1) string
-                datetimeFormat (1,1) string = "yyyy-MM-dd HH:mm:ss"
+                options.level (1,1) LogLevel = LogHandler.DEFAULTLEVEL
+                options.format (1,1) string = logging.DEFAULTFORMAT
+                options.datetimeFormat (1,1) string = logging.DEFAULTDATEFMT
             end
-            obj.level = level;
-            obj.format = format;
-            obj.datetimeFormat = datetimeFormat;
+            obj.level = options.level;
+            obj.format = options.format;
+            obj.datetimeFormat = options.datetimeFormat;
         end
 
         function logrecord(obj, record)
