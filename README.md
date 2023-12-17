@@ -1,2 +1,3 @@
 # MATLAB-Logging
-Python-like logging for MATLAB
+
+A logger based on python's built-in `logging` package.
