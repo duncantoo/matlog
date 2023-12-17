@@ -14,5 +14,6 @@ classdef LogLevel < uint16
         INFO (20)
         DEBUG (10)
         TRACE (5)
+        ALL (0)
     end
 end

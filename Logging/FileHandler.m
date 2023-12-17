@@ -5,9 +5,16 @@ classdef FileHandler < LogHandler
     end
 
     methods
-        function obj = FileHandler(filepath, filemode, varargin)
-            obj@LogHandler(varargin{:});
-            obj.fileID = fopen(filepath, filemode);
+        function obj = FileHandler(filepath, varargin)
+            parser = inputParser();
+            parser.KeepUnmatched = true;
+            parser.addRequired('filepath', @mustBeText);
+            parser.addParameter('filemode', 'w', @mustBeText);
+            parse(parser, filepath, varargin{:});
+            unmatched = namedargs2cell(parser.Unmatched);
+
+            obj@LogHandler(unmatched{:});
+            obj.fileID = fopen(filepath, parser.Results.filemode);
         end
 
         function delete(obj)
