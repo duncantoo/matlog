@@ -31,7 +31,7 @@ classdef (Abstract) LogHandler < handle
             obj.dateFormat = options.dateFormat;
         end
 
-        function logrecord(obj, record)
+        function logRecord(obj, record)
             arguments
                 obj
                 record (1,1) mlog.LogRecord

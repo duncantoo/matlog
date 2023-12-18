@@ -75,7 +75,7 @@ logger = logging.getLogger();
 display(logger.handlers);
 logger.error("This message won't be seen because there are no handlers");
 handler1 = StreamHandler();
-logger.addhandler(handler1);
+logger.addHandler(handler1);
 logger.error("Now we have a logger we can see the message");
 % We can add another logger with a different format. You can even change how
 % the time is represented.
@@ -83,7 +83,7 @@ logger.error("Now we have a logger we can see the message");
 % logger's level. By default they allow all levels.
 handler2 = StreamHandler('format', '%(asctime)s %(level)s: %(message)s',...
     'dateFormat', 'yyyy MMM dd - HHmmss', 'level', 'ERROR');
-logger.addhandler(handler2);
+logger.addHandler(handler2);
 logger.error("You should see this twice");
 logger.warning("This priority will only be logged by one handler");
 
@@ -117,8 +117,8 @@ daughterLogger.level = LogLevel.ALL;
 display([rootLogger.name fatherLogger.name daughterLogger.name]);
 display([rootLogger.parent fatherLogger.parent.name daughterLogger.parent.name]);
 
-fatherLogger.addhandler(StreamHandler());
-daughterLogger.addhandler(StreamHandler());
+fatherLogger.addHandler(StreamHandler());
+daughterLogger.addHandler(StreamHandler());
 
 % Log different levels to demonstrate the filtering effect of the hierarchy.
 % Notice the logger name in each log message.

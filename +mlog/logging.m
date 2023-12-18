@@ -21,10 +21,10 @@ classdef logging
             rootLogger = mlog.logging.getLogger();
             rootLogger.level = options.level;
             streamHandler = mlog.StreamHandler('format', options.format);
-            rootLogger.addhandler(streamHandler);
+            rootLogger.addHandler(streamHandler);
             if ~ismissing(options.logfile)
                 fileHandler = mlog.FileHandler(options.logfile, 'format', options.format);
-                rootLogger.addhandler(fileHandler);
+                rootLogger.addHandler(fileHandler);
             end
         end
 

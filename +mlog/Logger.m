@@ -33,7 +33,7 @@ classdef Logger < handle
     end
     %%
     methods (Access = protected)
-        function addmsg(obj, level, msg, varargin)
+        function addMsg(obj, level, msg, varargin)
             arguments
                 obj
                 level (1,1) mlog.LogLevel
@@ -43,17 +43,17 @@ classdef Logger < handle
                 varargin
             end
             logRecord = mlog.LogRecord(obj, level, msg, varargin{:});
-            obj.propagaterecord(logRecord);
+            obj.propagateRecord(logRecord);
         end
 
-        function propagaterecord(obj, record)
+        function propagateRecord(obj, record)
             if record.level >= obj.level
                 for iHandler = 1:length(obj.handlers)
-                    obj.handlers{iHandler}.logrecord(record);
+                    obj.handlers{iHandler}.logRecord(record);
                 end
                 if ~ismissing(obj.parent)
                     record.logger = obj.parent;
-                    obj.parent.propagaterecord(record);
+                    obj.parent.propagateRecord(record);
                 end
             end
         end
@@ -64,7 +64,7 @@ classdef Logger < handle
             obj.handlers = {};
         end
 
-        function addhandler(obj, handler)
+        function addHandler(obj, handler)
             arguments
                 obj
                 handler (1,1) mlog.LogHandler
@@ -90,27 +90,27 @@ classdef Logger < handle
 
         %% Log commands for each level
         function trace(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.TRACE, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.TRACE, msg, varargin{:});
         end
 
         function debug(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.DEBUG, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.DEBUG, msg, varargin{:});
         end
 
         function info(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.INFO, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.INFO, msg, varargin{:});
         end
 
         function warning(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.WARNING, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.WARNING, msg, varargin{:});
         end
 
         function error(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.ERROR, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.ERROR, msg, varargin{:});
         end
 
         function fatal(obj, msg, varargin)
-            obj.addmsg(mlog.LogLevel.FATAL, msg, varargin{:});
+            obj.addMsg(mlog.LogLevel.FATAL, msg, varargin{:});
         end
         %%
         function exception(obj, exc, msg, options)
