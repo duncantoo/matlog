@@ -1,6 +1,10 @@
 classdef (Abstract) LogHandler < handle
-    %LOGHANDLER Summary of this class goes here
-    %   Detailed explanation goes here
+    %LOGHANDLER Abstract class which formats LogRecord objects to string and
+    %writes them (abstractly!)
+    %
+    %
+    %
+    %The writeMessage method is customised by derived classes.
 
     properties
         level
@@ -10,6 +14,12 @@ classdef (Abstract) LogHandler < handle
         DEFAULTLEVEL = mlog.LogLevel.ALL
     end
     properties (SetAccess=private)
+        % formatFn format a LogRecord to string according to a specification in
+        % the form "__%(fieldname)s__".
+        %
+        % The field names must occur as properties or methods of LogRecord.
+        %
+        % See also LogRecord.
         formatFn
     end
     properties (Access=private)
@@ -21,6 +31,15 @@ classdef (Abstract) LogHandler < handle
 
     methods
         function obj = LogHandler(options)
+            % LogHandler Create a LogHandler instance.
+            %
+            %  LogHandler(__, 'level', value) specifies the minimum threshold
+            %  for the entries being written. Defaults to ALL.
+            %  LogHandler(__, 'format', value) specifies the formatting of
+            %  the logs.
+            %  See also formatFn.
+            %  LogHandler(__, 'dateFormat', value) specifies the formatting of
+            %  datetime fields in the log.
             arguments
                 options.level (1,1) mlog.LogLevel = mlog.LogHandler.DEFAULTLEVEL
                 options.format (1,1) string = mlog.logging.DEFAULTFORMAT
@@ -32,6 +51,7 @@ classdef (Abstract) LogHandler < handle
         end
 
         function logRecord(obj, record)
+            %logRecord format and write the LogRecord.
             arguments
                 obj
                 record (1,1) mlog.LogRecord
@@ -61,7 +81,6 @@ classdef (Abstract) LogHandler < handle
                 ext = extents{1};
                 matlabFmt = eraseBetween(matlabFmt, ext(1) - 1, ext(2) + 1);
             end
-            % This function will be used to format each message.
             function msgFormatted = formatFn(obj, record)
                 recordFields = cell(length(tokens), 1);
                 for ii = 1:length(tokens)
@@ -79,6 +98,7 @@ classdef (Abstract) LogHandler < handle
     end
 
     methods (Abstract)
+        %writeMessage abstract method to output LogRecord
         writeMessage(msgStr)
     end
 end

@@ -1,6 +1,7 @@
 classdef StreamHandler < mlog.LogHandler
-    %STREAMHANDLER Summary of this class goes here
-    %   Detailed explanation goes here
+    %STREAMHANDLER stream logs to std out.
+    %
+    %See also LogHandler.
 
     methods
         function writeMessage(~, msgStr)

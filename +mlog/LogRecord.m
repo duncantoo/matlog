@@ -110,7 +110,7 @@ classdef LogRecord < handle
             res = obj.logger.name;
         end
 
-        function res = get.process(obj)
+        function res = get.process(~)
             res = feature('getpid');
         end
 
