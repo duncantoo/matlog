@@ -1,4 +1,4 @@
-classdef StreamHandler < LogHandler
+classdef StreamHandler < mlog.LogHandler
     %STREAMHANDLER Summary of this class goes here
     %   Detailed explanation goes here
         

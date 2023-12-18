@@ -2,20 +2,17 @@ classdef TestLogLevel < matlab.unittest.TestCase
 
     methods (TestClassSetup)
         function importPaths(~)
-            addpath(fullfile(...
-                fileparts(fileparts(mfilename('fullpath'))),...
-                'logging'...
-            ));
+            addpath(fullfile(fileparts(fileparts(mfilename('fullpath')))));
         end
     end
 
     methods(Test)
         function testErrorBiggerThanWarning(testCase)
-            testCase.verifyGreaterThan(LogLevel.ERROR, LogLevel.WARN);
+            testCase.verifyGreaterThan(mlog.LogLevel.ERROR, mlog.LogLevel.WARNING);
         end
 
         function testLevelsEqualToSelf(testCase)
-            for level = enumeration("LogLevel")'
+            for level = enumeration(?mlog.LogLevel)'
                 testCase.verifyEqual(level, level);
             end
         end
@@ -23,7 +20,7 @@ classdef TestLogLevel < matlab.unittest.TestCase
         function testLevelsInOrder(testCase)
             % Highest to lowest
             levelPrev = missing;
-            for level = enumeration("LogLevel")'
+            for level = enumeration(?mlog.LogLevel)'
                 if ~ismissing(levelPrev)
                     testCase.verifyLessThan(level, levelPrev);
                 end

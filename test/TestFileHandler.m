@@ -1,15 +1,11 @@
 classdef TestFileHandler < matlab.unittest.TestCase
     properties
-        dir
         filepath
     end
 
     methods(TestClassSetup)
         function importPaths(~)
-            addpath(fullfile(...
-                fileparts(fileparts(mfilename('fullpath'))),...
-                'logging'...
-            ));
+            addpath(fullfile(fileparts(fileparts(mfilename('fullpath')))));
         end
     end
 
@@ -33,7 +29,7 @@ classdef TestFileHandler < matlab.unittest.TestCase
         function testFileCreation(testCase)
             % test the log file is created.
             testCase.verifyFalse(logical(exist(testCase.filepath, 'file')));
-            FileHandler(testCase.filepath);
+            mlog.FileHandler(testCase.filepath);
             testCase.verifyTrue(logical(exist(testCase.filepath, 'file')));
         end
 
@@ -48,7 +44,7 @@ classdef TestFileHandler < matlab.unittest.TestCase
                 'author', 'JK Rowling'...
             );
 
-            handler = FileHandler(testCase.filepath, 'format', formatStr);
+            handler = mlog.FileHandler(testCase.filepath, 'format', formatStr);
             output = handler.formatFn(handler, data);
 
             expected = "Harry Potter no5 by JK Rowling";
@@ -56,9 +52,9 @@ classdef TestFileHandler < matlab.unittest.TestCase
         end
 
         function testLevelFilter(testCase)
-            logger = logging.getLogger();
-            logger.level = LogLevel.ALL;
-            handler = FileHandler(testCase.filepath, 'level', 'WARN');
+            logger = mlog.logging.getLogger();
+            logger.level = mlog.LogLevel.ALL;
+            handler = mlog.FileHandler(testCase.filepath, 'level', 'WARN');
             logger.addhandler(handler);
             logger.warning("This should be logged");
             logger.info("This should not be logged");

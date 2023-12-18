@@ -4,10 +4,10 @@ classdef (Abstract) LogHandler < handle
     
     properties
         level
-        datetimeFormat
+        dateFormat
     end
     properties(Constant)
-        DEFAULTLEVEL = LogLevel.ALL
+        DEFAULTLEVEL = mlog.LogLevel.ALL
     end
     properties (SetAccess=private)
         formatFn
@@ -22,19 +22,19 @@ classdef (Abstract) LogHandler < handle
     methods
         function obj = LogHandler(options)
             arguments
-                options.level (1,1) LogLevel = LogHandler.DEFAULTLEVEL
-                options.format (1,1) string = logging.DEFAULTFORMAT
-                options.datetimeFormat (1,1) string = logging.DEFAULTDATEFMT
+                options.level (1,1) mlog.LogLevel = mlog.LogHandler.DEFAULTLEVEL
+                options.format (1,1) string = mlog.logging.DEFAULTFORMAT
+                options.dateFormat (1,1) string = mlog.logging.DEFAULTDATEFORMAT
             end
             obj.level = options.level;
             obj.format = options.format;
-            obj.datetimeFormat = options.datetimeFormat;
+            obj.dateFormat = options.dateFormat;
         end
 
         function logrecord(obj, record)
             arguments
                 obj
-                record (1,1) LogRecord
+                record (1,1) mlog.LogRecord
             end
             if record.level >= obj.level
                 msgFormatted = obj.formatFn(obj, record);
@@ -46,7 +46,7 @@ classdef (Abstract) LogHandler < handle
             formatStr = obj.format_;
         end
 
-        function obj = set.format(obj, formatStr)
+        function set.format(obj, formatStr)
             arguments
                 obj
                 formatStr (1,1) string
@@ -68,7 +68,7 @@ classdef (Abstract) LogHandler < handle
                     fieldName = tokens{ii};
                     val = record.(fieldName);
                     if isdatetime(val)
-                        val = string(val, obj.datetimeFormat);
+                        val = string(val, obj.dateFormat);
                     end
                     recordFields{ii} = val;
                 end
@@ -80,14 +80,5 @@ classdef (Abstract) LogHandler < handle
 
     methods (Abstract)
         writeMessage(msgStr)
-    end
-end
-
-
-function x = ternary(cond, a, b)
-    if cond
-        x = a;
-    else
-        x = b;
     end
 end

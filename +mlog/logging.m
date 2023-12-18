@@ -5,21 +5,38 @@ classdef logging
         loggers = containers.Map
     end
     properties(Constant)
-        DEFAULTLEVEL = LogLevel.WARN
-        DEFAULTFORMAT = "%(level)s: %(asctime)s: %(name)s: %(message)s"
-        DEFAULTDATEFMT = "yyyy-MM-dd HH:mm:ss.SSS"
+        DEFAULTLEVEL = mlog.LogLevel.WARNING
+        DEFAULTFORMAT = "%(asctime)s - %(name)s - %(level)-7s - %(message)s"
+        DEFAULTDATEFORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
     end
     
     methods(Static)
+        function basicConfig(options)
+            arguments
+                options.level (1,1) mlog.LogLevel = mlog.logging.DEFAULTLEVEL
+                options.logfile (1,1) string = missing
+                options.format (1,1) string = mlog.logging.DEFAULTFORMAT
+            end
+            mlog.logging.clear();
+            rootLogger = mlog.logging.getLogger();
+            rootLogger.level = options.level;
+            streamHandler = mlog.StreamHandler('format', options.format);
+            rootLogger.addhandler(streamHandler);
+            if ~ismissing(options.logfile)
+                fileHandler = mlog.FileHandler(options.logfile, 'format', options.format);
+                rootLogger.addhandler(fileHandler);
+            end
+        end
+
         function logger = getLogger(name)
             %GETLOGGER make a new logger or return an existing logger
             % Return existing logger if one already exists.
             arguments
                 name (1,1) string = ""
             end
-            loggers = logging.loggers;
+            loggers = mlog.logging.loggers;
             if isempty(loggers)
-                loggers("") = Logger("root", missing, [], LogLevel.WARN);
+                loggers("") = mlog.Logger("root", missing, [], mlog.logging.DEFAULTLEVEL);
             end
             if ismember(name, keys(loggers))
                 logger = loggers(name);
@@ -27,10 +44,10 @@ classdef logging
                 % Construct a new logger and track it for anyone who needs
                 % access to the logger again. Also reset parent linking in
                 % case it is parent to any pre-existing loggers.
-                logger = Logger(name, missing, [], missing);
+                logger = mlog.Logger(name, missing, [], missing);
                 loggers(name) = logger;
                 names = string(keys(loggers));
-                iParents = logging.findParents(names, names);
+                iParents = mlog.logging.findParents(names, names);
                 for iChild = 1:length(loggers)
                     iParent = iParents(iChild);
                     if isnan(iParent)
@@ -71,28 +88,11 @@ classdef logging
 
         function clear()
             %CLEAR delete all loggers and reset tree.
-            loggers = logging.loggers;
+            loggers = mlog.logging.loggers;
             for key_ = keys(loggers)
                 key = key_{:};
                 loggers(key).close();
                 loggers.remove(key);
-            end
-        end
-
-        function basicconfig(options)
-            arguments
-                options.level (1,1) LogLevel = logging.DEFAULTLEVEL
-                options.logfile (1,1) string = missing
-                options.format (1,1) string = logging.DEFAULTFORMAT
-            end
-            logging.clear();
-            rootLogger = logging.getLogger();
-            rootLogger.level = options.level;
-            streamHandler = StreamHandler();
-            rootLogger.addhandler(streamHandler);
-            if ~ismissing(options.logfile)
-                fileHandler = FileHandler(options.logfile);
-                rootLogger.addhandler(fileHandler);
             end
         end
     end
