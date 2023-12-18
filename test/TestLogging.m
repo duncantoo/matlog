@@ -27,7 +27,7 @@ classdef TestLogging < matlab.unittest.TestCase
             mlog.logging.clear();
         end
     end
-    
+  
     methods(Test)
         % Test methods
 
@@ -48,7 +48,7 @@ classdef TestLogging < matlab.unittest.TestCase
             logger = mlog.logging.getLogger();
             logger.info("world");
             logger.close();
-            
+          
             lines = string(importdata(testCase.filepath));
             testCase.verifyLength(lines, 1);
             testCase.verifyEqual(lines{1}, 'INFO: hello world!');
@@ -69,7 +69,7 @@ classdef TestLogging < matlab.unittest.TestCase
             logger_b.error('First message');
             mlog.logging.clear();
             logger_b.error('Second message');
-            
+          
             lines = string(importdata(testCase.filepath));
             testCase.verifyLength(lines, 1);
             testCase.verifySubstring(lines{1}, 'First message');
@@ -84,5 +84,5 @@ classdef TestLogging < matlab.unittest.TestCase
             testCase.verifyNotEqual(logger_b2.parent, logger_a);
         end
     end
-    
+  
 end

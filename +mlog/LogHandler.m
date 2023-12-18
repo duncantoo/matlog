@@ -1,7 +1,7 @@
 classdef (Abstract) LogHandler < handle
     %LOGHANDLER Summary of this class goes here
     %   Detailed explanation goes here
-    
+   
     properties
         level
         dateFormat
@@ -18,7 +18,7 @@ classdef (Abstract) LogHandler < handle
     properties (Dependent)
         format
     end
-    
+   
     methods
         function obj = LogHandler(options)
             arguments
@@ -55,7 +55,7 @@ classdef (Abstract) LogHandler < handle
 
             [tokens, tokenExtents] = regexp(...
                 formatStr, "%\((\w+)\)", 'tokens', 'tokenExtents');
-            
+           
             matlabFmt = formatStr;
             for extents = tokenExtents(end:-1:1)
                 ext = extents{1};

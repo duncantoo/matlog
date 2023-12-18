@@ -19,7 +19,7 @@ classdef FileHandler < mlog.LogHandler
 
         function delete(obj)
             fclose(obj.fileID);
-        end 
+        end
 
         function writeMessage(obj, msgStr)
             fprintf(obj.fileID, msgStr + newline);

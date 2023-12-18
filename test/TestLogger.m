@@ -27,7 +27,7 @@ classdef TestLogger < matlab.unittest.TestCase
             mlog.logging.clear();
         end
     end
-    
+  
     methods(Test)
         % Test methods
 
@@ -83,5 +83,5 @@ classdef TestLogger < matlab.unittest.TestCase
             testCase.verifySubstring(lines(2), "ERROR");
         end
     end
-    
+  
 end

@@ -1,7 +1,7 @@
 classdef LogRecord < handle
     %LogRecord Summary of this class goes here
     %   Detailed explanation goes here
-    
+   
     properties
         logger
     end
@@ -30,7 +30,7 @@ classdef LogRecord < handle
         name
         process
     end
-    
+   
     methods
         function obj = LogRecord(logger, level, msg, varargin)
             %LogRecord Construct an instance of this class f
@@ -49,7 +49,7 @@ classdef LogRecord < handle
             obj.args = varargin;
             obj.time = datetime("now");
         end
-        
+       
         function res = asctime(obj)
             res = obj.time;
         end
@@ -133,7 +133,7 @@ classdef LogRecord < handle
                 iEntry = find(inModule, 1, 'last');
                 res = stack(iEntry + 1:end);
                 obj.callerStack_ = res;
-            end            
+            end           
         end
     end
 end
