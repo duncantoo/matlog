@@ -9,7 +9,7 @@ classdef logging
         DEFAULTFORMAT = "%(asctime)s - %(name)s - %(level)-7s - %(message)s"
         DEFAULTDATEFORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
     end
-   
+  
     methods(Static)
         function basicConfig(options)
             arguments

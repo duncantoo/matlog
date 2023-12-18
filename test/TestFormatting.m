@@ -1,15 +1,24 @@
-classdef TestLogging < LogFileTestCase
+classdef TestFormatting < LogFileTestCase
  
     methods(Test)
         % Test methods
 
-        function testBasicConfigLevel(testCase)
-            % Check the level property of the root logger is set properly.
-            for level = enumeration(?mlog.LogLevel)'
-                logging.basicConfig('level', level);
-                logger = logging.getLogger();
-                testCase.verifyEqual(logger.level, level);
-            end
+        function testFilename(testCase)
+            % Check the filename is interpretted properly.
+            mlog.logging.basicConfig('format', '%(filename)s',...
+                'logfile', testCase.filepath);
+            logger = mlog.logging.getLogger();
+            logger.error('');
+            testCase.verifyLogfileEqual(sprintf("%s.m", mfilename()));
+        end
+
+        function testFunctionName(testCase)
+            % Check the filename is interpretted properly.
+            mlog.logging.basicConfig('format', '%(funcName)s',...
+                'logfile', testCase.filepath);
+            logger = mlog.logging.getLogger();
+            logger.error('');
+            testCase.verifyLogfileEqual("TestFormatting.testFunctionName");
         end
 
         function testBasicConfigFormat(testCase)
@@ -19,8 +28,7 @@ classdef TestLogging < LogFileTestCase
                 'logfile', testCase.filepath);
             logger = mlog.logging.getLogger();
             logger.info("world");
-            logger.close();
-         
+
             testCase.verifyLogfileEqual("INFO: hello world!");
         end
 
@@ -28,8 +36,7 @@ classdef TestLogging < LogFileTestCase
             % Create hierarchy of loggers.
             % Check that upon running logging.clear the loggers no longer work
             % and the hierarchy is clear.
-            mlog.logging.basicConfig('logfile', testCase.filepath,...
-                'format', '%(message)s');
+            mlog.logging.basicConfig('logfile', testCase.filepath);
 
             % Create root and 1st level
             logger_root = mlog.logging.getLogger();
@@ -40,7 +47,8 @@ classdef TestLogging < LogFileTestCase
             logger_b.error('First message');
             mlog.logging.clear();
             logger_b.error('Second message');
-            testCase.verifyLogfileEqual('First message');
+            % We only have the first message and not the second.
+            testCase.verifyLogfileSubstrings("First message");
 
             mlog.logging.basicConfig('logfile', testCase.filepath);
             logger_root2 = mlog.logging.getLogger();

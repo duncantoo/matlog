@@ -59,12 +59,12 @@ classdef TestFileHandler < matlab.unittest.TestCase
             logger.warning("This should be logged");
             logger.info("This should not be logged");
             logger.error("This definitely should be logged");
-          
+         
             lines = string(importdata(testCase.filepath));
             testCase.verifyLength(lines, 2);
             testCase.verifySubstring(lines(1), "This should be logged");
             testCase.verifySubstring(lines(2), "This definitely should be logged");
         end
     end
-  
+ 
 end

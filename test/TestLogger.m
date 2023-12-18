@@ -1,33 +1,5 @@
-classdef TestLogger < matlab.unittest.TestCase
-    properties
-        filepath
-    end
-
-    methods(TestClassSetup)
-        function importPaths(~)
-            addpath(fullfile(fileparts(fileparts(mfilename('fullpath')))));
-        end
-    end
-
-    methods(TestMethodSetup)
-        % Setup for each test
-        function fetchdir(obj)
-            obj.filepath = tempname;
-        end
-    end
-
-    methods(TestMethodTeardown)
-        function cleartempfile(testCase)
-            if exist(testCase.filepath, 'file')
-                delete(testCase.filepath);
-            end
-        end
-
-        function clearLogger(~)
-            mlog.logging.clear();
-        end
-    end
-  
+classdef TestLogger < LogFileTestCase
+ 
     methods(Test)
         % Test methods
 
@@ -67,7 +39,8 @@ classdef TestLogger < matlab.unittest.TestCase
 
         function testLoggerLevelFilter(testCase)
             % Test a message at a low level is not logged but a high-level is.
-            mlog.logging.basicConfig('level', 'WARN', 'logfile', testCase.filepath);
+            mlog.logging.basicConfig('logfile', testCase.filepath,...
+                'level', 'WARN', 'format', '%(level)s - %(message)s');
             logger = mlog.logging.getLogger();
             logger.info("This should not be logged");
             logger.warning("This should be logged");
@@ -75,13 +48,11 @@ classdef TestLogger < matlab.unittest.TestCase
             logger.level = mlog.LogLevel.NONE;
             logger.error("This should not be logged");
 
-            lines = string(importdata(testCase.filepath));
-            testCase.verifyLength(lines, 2);
-            testCase.verifySubstring(lines(1), "This should be logged");
-            testCase.verifySubstring(lines(1), "WARN");
-            testCase.verifySubstring(lines(2), "This definitely should be logged");
-            testCase.verifySubstring(lines(2), "ERROR");
+            testCase.verifyLogfileEqual([...
+                "WARNING - This should be logged",...
+                "ERROR - This definitely should be logged"...
+            ]);
         end
     end
-  
+ 
 end
