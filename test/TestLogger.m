@@ -1,5 +1,5 @@
 classdef TestLogger < LogFileTestCase
- 
+
     methods(Test)
         % Test methods
 
@@ -40,7 +40,7 @@ classdef TestLogger < LogFileTestCase
         function testLoggerLevelFilter(testCase)
             % Test a message at a low level is not logged but a high-level is.
             mlog.logging.basicConfig('logfile', testCase.filepath,...
-                'level', 'WARN', 'format', '%(level)s - %(message)s');
+                'level', 'WARNING', 'format', '%(level)s - %(message)s');
             logger = mlog.logging.getLogger();
             logger.info("This should not be logged");
             logger.warning("This should be logged");
@@ -53,6 +53,39 @@ classdef TestLogger < LogFileTestCase
                 "ERROR - This definitely should be logged"...
             ]);
         end
+
+        function testLoggerExceptionMultiline(testCase)
+            mlog.logging.basicConfig('logfile', testCase.filepath, ...
+                'format', '%(level)s - %(message)s');
+            logger = mlog.logging.getLogger();
+            try
+                error("Throw an exception");
+            catch ME
+                logger.exception(ME, "We just caught an exception",...
+                    'splitlines', false);
+            end
+            lines = string(importdata(testCase.filepath));
+            testCase.verifyEqual(lines(1), "ERROR - We just caught an exception");
+            % The error message is in the first few lines of log without the
+            % level.
+            testCase.verifyTrue(ismember("Throw an exception", lines(1:5)));
+        end
+
+        function testLoggerExceptionSplitlines(testCase)
+            mlog.logging.basicConfig('logfile', testCase.filepath, ...
+                'format', '%(level)s - %(message)s');
+            logger = mlog.logging.getLogger();
+            try
+                error("Throw an exception");
+            catch ME
+                logger.exception(ME, "We just caught an exception",...
+                    'splitlines', true);
+            end
+            lines = string(importdata(testCase.filepath));
+            testCase.verifyEqual(lines(1), "ERROR - We just caught an exception");
+            % The error message is in the first few lines of log with the level
+            testCase.verifyTrue(ismember("ERROR - Throw an exception", lines(1:5)));
+        end
     end
- 
+
 end

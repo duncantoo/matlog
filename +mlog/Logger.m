@@ -113,21 +113,25 @@ classdef Logger < handle
             obj.addmsg(mlog.LogLevel.FATAL, msg, varargin{:});
         end
         %%
-        function log_exception(obj, exc)
+        function exception(obj, exc, msg, options)
+            % EXCEPTION log the message as an ERROR with the traceback.
             arguments
                 obj
-                exc MException
+                exc (1,1) MException
+                msg (1,1) string = ""
+                options.splitlines (1,1) logical = false
             end
-            obj.error(sprintf('Exception %s - %s', exc.identifier, exc.message));
-            for s = exc.stack'
-                [~, base, ext] = fileparts(s.file);
-                obj.error(sprintf('  Error in %s: %s (line %d)', [base, ext], s.name, s.line));
-            end
-            if ~isempty(exc.cause)
-                obj.error('Cause:');
-                for c = exc.cause'
-                    obj.error(sprintf('  %s', c));
+            traceback = string(exc.getReport());
+            lines = [msg; "Traceback:"; splitlines(traceback)];
+            % Remove empty lines
+            lines = lines(strlength(strip(lines)) > 0);
+
+            if options.splitlines
+                for line = lines'
+                    obj.error(line);
                 end
+            else
+                obj.error(join(lines, newline));
             end
         end
     end

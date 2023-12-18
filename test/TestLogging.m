@@ -1,5 +1,5 @@
 classdef TestLogging < LogFileTestCase
- 
+
     methods(Test)
         % Test methods
 
@@ -20,7 +20,7 @@ classdef TestLogging < LogFileTestCase
             logger = mlog.logging.getLogger();
             logger.info("world");
             logger.close();
-         
+
             testCase.verifyLogfileEqual("INFO: hello world!");
         end
 
@@ -52,5 +52,5 @@ classdef TestLogging < LogFileTestCase
             testCase.verifyNotEqual(logger_b2.parent, logger_a);
         end
     end
- 
+
 end
