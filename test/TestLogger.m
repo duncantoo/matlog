@@ -1,5 +1,5 @@
 classdef TestLogger < LogFileTestCase
- 
+
     methods(Test)
         % Test methods
 
@@ -87,5 +87,5 @@ classdef TestLogger < LogFileTestCase
             testCase.verifyTrue(ismember("ERROR - Throw an exception", lines(1:5)));
         end
     end
- 
+
 end

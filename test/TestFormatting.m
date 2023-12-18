@@ -1,5 +1,5 @@
 classdef TestFormatting < LogFileTestCase
- 
+
     methods(Test)
         % Test methods
 
@@ -60,5 +60,5 @@ classdef TestFormatting < LogFileTestCase
             testCase.verifyNotEqual(logger_b2.parent, logger_a);
         end
     end
- 
+
 end
