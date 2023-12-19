@@ -39,6 +39,8 @@ logger.warning('The quick brown fox');
 WARNING ~ PID 016181 ~ The quick brown fox
 ```
 
+You can inspect valid fields with `logging.formatFields`.
+
 ### Log to file
 
 Specify the `logfile` to create or overwrite the target path.
@@ -129,7 +131,7 @@ We create a hierarchy of loggers with different levels.
 import matlog.logging matlog.StreamHandler matlog.LogLevel
 % basicConfig configures the root logger only.
 rootLogger = logging.getLogger();
-fatherLogger.level = LogLevel.WARNING;
+rootLogger.level = LogLevel.WARNING;
 
 fatherLogger = logging.getLogger('father');
 fatherLogger.level = LogLevel.INFO;

@@ -14,11 +14,11 @@ classdef Logger < handle
     %
     %See also logging, LogHandler.
     properties
-        name
-        handlers
+        name (1,1) string
+        handlers (:,1)
     end
     properties (Access=protected)
-        level_ = missing
+        level_ (1,1) = missing
     end
 
     properties (Dependent)
@@ -101,7 +101,11 @@ classdef Logger < handle
         end
 
         function set.level(obj, level)
-            obj.level_ = level;
+            if ismissing(level)
+                obj.level_ = missing;
+            else
+                obj.level_ = matlog.LogLevel(level);
+            end
         end
 
         %% Log commands for each level

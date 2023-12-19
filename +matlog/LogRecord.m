@@ -1,19 +1,25 @@
 classdef LogRecord < handle
-    %LogRecord Summary of this class goes here
-    %   Detailed explanation goes here
+    %LogRecord Stores a message to log with metadata.
+    %These metadata which can be included in log entries are referred to as
+    %`formatFields` and are tagged as such.
 
+    properties(Constant)
+        formatFields = findFormatFields()
+    end
     properties
         logger
     end
-
-    properties (SetAccess = protected)
-        level
+    properties(SetAccess=protected)
         msg
         args
         time
     end
+    %% Properties which act as format fields
+    properties (Description='formatField')
+        level
+    end
 
-    properties (Access = protected)
+    properties(Access = protected)
         % stored values which can be requested and lazily evaluated
         % We store the traceback for speed. We might need to use it for several
         % fields.
@@ -22,8 +28,9 @@ classdef LogRecord < handle
         message_ = missing
     end
 
-    %% properties which are really quick to compute; use getter to save clutter
-    properties(Dependent)
+    %% Dependent properties which act as format fields
+    % These are quick to compute; use getter to save clutter
+    properties(Dependent, Description='formatField')
         levelname
         levelno
         msecs
@@ -49,7 +56,10 @@ classdef LogRecord < handle
             obj.args = varargin;
             obj.time = datetime("now");
         end
+    end
 
+    %% Functions which act as format fields
+    methods(Description='formatField')
         function res = asctime(obj)
             res = obj.time;
         end
@@ -94,27 +104,7 @@ classdef LogRecord < handle
             end
         end
 
-        function res = get.levelname(obj)
-            res = string(obj.level);
-        end
-
-        function res = get.levelno(obj)
-            res = uint16(obj.level);
-        end
-
-        function res = get.msecs(obj)
-            res = round(mod(second(obj.time), 1) * 1000);
-        end
-
-        function res = get.name(obj)
-            res = obj.logger.name;
-        end
-
-        function res = get.process(~)
-            res = feature('getpid');
-        end
-
-        %% Getters for protected properties
+        %% 'Getters' for protected properties
         function res = stack(obj)
             res = obj.stack_;
             if ismissing(res)
@@ -136,5 +126,43 @@ classdef LogRecord < handle
             end
         end
     end
+    
+    %% Setters and getters
+    methods
+        function res = get.levelname(obj)
+            res = string(obj.level);
+        end
+
+        function res = get.levelno(obj)
+            res = uint16(obj.level);
+        end
+
+        function res = get.msecs(obj)
+            res = round(mod(second(obj.time), 1) * 1000);
+        end
+
+        function res = get.name(obj)
+            res = obj.logger.name;
+        end
+
+        function res = get.process(~)
+            res = feature('getpid');
+        end
+    end
 end
 
+
+function res = findFormatFields()
+    % formatFields Retrieve the formatFields of the class.
+    persistent formatFields;
+    if isempty(formatFields)
+        info = ?matlog.LogRecord;
+        props = info.PropertyList;
+        meths = info.MethodList;
+        names = {props.Name meths.Name};
+        descs = {props.Description meths.Description};
+        isFormatField = cellfun(@(x) strcmp(x, 'formatField'), descs);
+        formatFields = names(isFormatField);
+    end
+    res = formatFields;
+end

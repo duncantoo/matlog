@@ -1,14 +1,11 @@
 classdef (Abstract) LogHandler < handle
     %LOGHANDLER Abstract class which formats LogRecord objects to string and
     %writes them (abstractly!)
-    %
-    %
-    %
     %The writeMessage method is customised by derived classes.
 
     properties
-        level
-        dateFormat
+        level (1,1) matlog.LogLevel
+        dateFormat (1,1) string
     end
     properties(Constant)
         DEFAULTLEVEL = matlog.LogLevel.ALL
@@ -26,6 +23,7 @@ classdef (Abstract) LogHandler < handle
         format_
     end
     properties (Dependent)
+        % FORMAT a string which specifies the log format.
         format
     end
 
@@ -67,15 +65,23 @@ classdef (Abstract) LogHandler < handle
         end
 
         function set.format(obj, formatStr)
+            % Interpret the formatStr.
             arguments
                 obj
                 formatStr (1,1) string
             end
             obj.format_ = formatStr;
+            allowedFields = matlog.LogRecord.formatFields;
 
             [tokens, tokenExtents] = regexp(...
                 formatStr, "%\((\w+)\)", 'tokens', 'tokenExtents');
 
+            % Check if the tokens are valid formatFields.
+            isValid = cellfun(@(x) ismember(x, allowedFields), tokens);
+            tokens = tokens(isValid);
+            tokenExtents = tokenExtents(isValid);
+            % Convert the input format string to a valid MATLAB format string
+            % by removing the (fieldname) part.
             matlabFmt = formatStr;
             for extents = tokenExtents(end:-1:1)
                 ext = extents{1};

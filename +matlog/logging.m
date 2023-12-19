@@ -9,11 +9,12 @@ classdef logging
         DEFAULTLEVEL = matlog.LogLevel.WARNING
         DEFAULTFORMAT = "%(asctime)s - %(name)s - %(level)-7s - %(message)s"
         DEFAULTDATEFORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
+        formatFields = matlog.LogRecord.formatFields()
     end
 
     methods(Static)
-        function basicConfig(options)
-            %basicConfig configure the root logger.
+        function configured = basicConfig(options)
+            %basicConfig configure the root logger if no loggers are active.
             %A StreamHandler will always be added.  
             %  basicConfig(__, 'level', value) sets the threshold level for
             %logging, defaulting to WARNING
@@ -21,10 +22,18 @@ classdef logging
             %in write mode, writing to the specified filepath
             %  basicConfig(__, 'format', value) sets the log format used by the
             %handlers.
+            %  basicConfig(__, 'force', true) closes any existing loggers and
+            %  the configuration is performed for any new loggers.
             arguments
                 options.level (1,1) matlog.LogLevel = matlog.logging.DEFAULTLEVEL
                 options.logfile (1,1) string = missing
                 options.format (1,1) string = matlog.logging.DEFAULTFORMAT
+                options.force (1,1) logical = false
+            end
+            % If loggers exist and have not been cleared then do nothing.
+            configured = options.force || ~matlog.logging.isActive;
+            if ~configured
+                return
             end
             matlog.logging.clear();
             rootLogger = matlog.logging.getLogger();
@@ -114,6 +123,10 @@ classdef logging
                 loggers(key).close();
                 loggers.remove(key);
             end
+        end
+
+        function ret = isActive()
+            ret = ~isempty(matlog.logging.loggers);
         end
     end
 end

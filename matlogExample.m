@@ -106,7 +106,7 @@ logging.clear();
 import matlog.logging matlog.StreamHandler matlog.LogLevel
 % basicConfig configures the root logger only.
 rootLogger = logging.getLogger();
-fatherLogger.level = LogLevel.WARNING;
+rootLogger.level = LogLevel.WARNING;
 
 fatherLogger = logging.getLogger('father');
 fatherLogger.level = LogLevel.INFO;
