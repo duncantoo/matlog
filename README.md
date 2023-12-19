@@ -1,8 +1,13 @@
-# MATLAB-Logging
+# matlog
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Use `matlog` for customisable logging within MATLAB styled on the Python module [`logging`](https://docs.python.org/3/library/logging.html).
+
+## Setup
+Download and place the `+matlog` folder in your project or library.
+
+The parent folder must be in your MATLAB path, as explained [here](https://uk.mathworks.com/help/matlab/matlab_oop/scoping-classes-with-packages.html#brfynt_-3).
 
 ## Quickstart
 
