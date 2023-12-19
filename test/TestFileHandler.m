@@ -1,28 +1,4 @@
-classdef TestFileHandler < matlab.unittest.TestCase
-    properties
-        filepath
-    end
-
-    methods(TestClassSetup)
-        function importPaths(~)
-            addpath(fullfile(fileparts(fileparts(mfilename('fullpath')))));
-        end
-    end
-
-    methods(TestMethodSetup)
-        % Setup for each test
-        function fetchdir(obj)
-            obj.filepath = tempname;
-        end
-    end
-
-    methods(TestMethodTeardown)
-        function cleartempfile(testCase)
-            if exist(testCase.filepath, 'file')
-                delete(testCase.filepath);
-            end
-        end
-    end
+classdef TestFileHandler < LogFileTestCase
 
     methods(Test)
         % Test methods
@@ -54,16 +30,17 @@ classdef TestFileHandler < matlab.unittest.TestCase
         function testLevelFilter(testCase)
             logger = mlog.logging.getLogger();
             logger.level = mlog.LogLevel.ALL;
-            handler = mlog.FileHandler(testCase.filepath, 'level', 'WARN');
-            logger.addhandler(handler);
+            handler = mlog.FileHandler(testCase.filepath, 'level', 'WARN',...
+                'format', '%(message)s');
+            logger.addHandler(handler);
             logger.warning("This should be logged");
             logger.info("This should not be logged");
             logger.error("This definitely should be logged");
 
-            lines = string(importdata(testCase.filepath));
-            testCase.verifyLength(lines, 2);
-            testCase.verifySubstring(lines(1), "This should be logged");
-            testCase.verifySubstring(lines(2), "This definitely should be logged");
+            testCase.verifyLogfileEqual([...
+                "This should be logged";...
+                "This definitely should be logged"...
+            ])
         end
     end
 

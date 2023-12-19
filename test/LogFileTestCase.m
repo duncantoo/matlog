@@ -12,13 +12,13 @@ classdef (Abstract) LogFileTestCase < matlab.unittest.TestCase
 
     methods(TestMethodSetup)
         % Setup for each test
-        function fetchdir(obj)
+        function fetchDir(obj)
             obj.filepath = tempname;
         end
     end
 
     methods(TestMethodTeardown)
-        function cleartempfile(testCase)
+        function clearTempFile(testCase)
             if exist(testCase.filepath, 'file')
                 delete(testCase.filepath);
             end

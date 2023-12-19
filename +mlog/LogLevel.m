@@ -1,5 +1,7 @@
 classdef LogLevel < uint16
-
+    %LogLevel an enumeration of logging severities.
+    %Each level is associated with a uint16 value and may be ordered by
+    %severity.
     methods
         function obj = LogLevel(value)
             obj@uint16(value)

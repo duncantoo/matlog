@@ -1,6 +1,7 @@
 classdef logging
-    %LOGGING Summary of this class goes here
-    %   Detailed explanation goes here
+    % User access point for logging.
+    % Use getLogger to create or retrieve an existing Logger.
+    % Use basicConfig for simple log configuration.
     properties(Constant, Access=protected)
         loggers = containers.Map
     end
@@ -12,6 +13,14 @@ classdef logging
 
     methods(Static)
         function basicConfig(options)
+            %basicConfig configure the root logger.
+            %A StreamHandler will always be added.  
+            %  basicConfig(__, 'level', value) sets the threshold level for
+            %logging, defaulting to WARNING
+            %  basicConfig(__, 'logfile', value) adds a FileHandler operaring
+            %in write mode, writing to the specified filepath
+            %  basicConfig(__, 'format', value) sets the log format used by the
+            %handlers.
             arguments
                 options.level (1,1) mlog.LogLevel = mlog.logging.DEFAULTLEVEL
                 options.logfile (1,1) string = missing
@@ -21,22 +30,32 @@ classdef logging
             rootLogger = mlog.logging.getLogger();
             rootLogger.level = options.level;
             streamHandler = mlog.StreamHandler('format', options.format);
-            rootLogger.addhandler(streamHandler);
+            rootLogger.addHandler(streamHandler);
             if ~ismissing(options.logfile)
-                fileHandler = mlog.FileHandler(options.logfile, 'format', options.format);
-                rootLogger.addhandler(fileHandler);
+                fileHandler = mlog.FileHandler(options.logfile,...
+                    'format', options.format);
+                rootLogger.addHandler(fileHandler);
             end
         end
 
         function logger = getLogger(name)
-            %GETLOGGER make a new logger or return an existing logger
-            % Return existing logger if one already exists.
+            %getLogger make a new logger or retrieve an existing logger
+            %
+            %  getLogger(name) returns a logger with the desired name.
+            %  getLogger() returns the root logger.
+            %
+            %If the logger already exists then return it, otherwise create a
+            %new one.
+            %The name acts as an ancestry tree, determining a hierarchy of
+            %loggers.
+            %See also Logger.
             arguments
                 name (1,1) string = ""
             end
             loggers = mlog.logging.loggers;
             if isempty(loggers)
-                loggers("") = mlog.Logger("root", missing, [], mlog.logging.DEFAULTLEVEL);
+                loggers("") = mlog.Logger("root", missing, {},...
+                    mlog.logging.DEFAULTLEVEL);
             end
             if ismember(name, keys(loggers))
                 logger = loggers(name);
@@ -71,7 +90,8 @@ classdef logging
             % Every parent must form the start of its child.
             % We may pick up some grand-parents etc. or siblings with different
             % stems.
-            parentFilter = arrayfun(@(p) children.startsWith(p), parents, 'UniformOutput', false);
+            parentFilter = arrayfun(@(p) children.startsWith(p), parents,...
+                'UniformOutput', false);
             parentFilter = cat(2, parentFilter{:});
             % Filter out siblings by checking number of levels.
             % We treat the empty string differently, having 0 levels.
