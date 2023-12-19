@@ -25,7 +25,7 @@ classdef (Abstract) LogFileTestCase < matlab.unittest.TestCase
         end
 
         function clearLogger(~)
-            mlog.logging.clear();
+            matlog.logging.clear();
         end
     end
 

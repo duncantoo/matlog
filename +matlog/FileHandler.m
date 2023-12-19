@@ -1,4 +1,4 @@
-classdef FileHandler < mlog.LogHandler
+classdef FileHandler < matlog.LogHandler
     %FILEHANDLER stream logs to file.
     properties(SetAccess=protected)
         fileID = -1
@@ -28,7 +28,7 @@ classdef FileHandler < mlog.LogHandler
             parse(parser, filepath, varargin{:});
             unmatched = namedargs2cell(parser.Unmatched);
 
-            obj@mlog.LogHandler(unmatched{:});
+            obj@matlog.LogHandler(unmatched{:});
             obj.fileID = fopen(filepath, parser.Results.filemode);
         end
 

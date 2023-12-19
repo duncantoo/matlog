@@ -1,18 +1,18 @@
 %% Logging Example
 % Learn how to create and use basic loggers.
-% Your path will need to include the parent folder of +mlog.
+% Your path will need to include the parent folder of +matlog.
 
 %% Section 1a Simplest logger
 % Create a logger, check the level, and then clear up.
 % Configure the logger in the simplest way and then create our logger.
 % The logging class contains the user interaction functions.
 
-% Begin by importing the `mlog.logging` class. Now we can access it using just
-% `logging`.
-import mlog.logging
+% Begin by importing the `matlog.logging` class. Now we can access it using
+% just `logging`.
+import matlog.logging
 
 logging.basicConfig();
-logger = mlog.logging.getLogger();
+logger = matlog.logging.getLogger();
 fprintf("Log level is %s\n", logger.level);
 logger.error("This should be logged");
 logger.info("This should not be logged");
@@ -23,20 +23,20 @@ logger.error("The logger has stopped logging.")
 
 %% Section 1b Alternative to importing
 % We can access the logging capability without importing by prefixing
-% references with mlog.
-mlog.logging.basicConfig();
-logger = mlog.logging.getLogger();
+% references with matlog.
+matlog.logging.basicConfig();
+logger = matlog.logging.getLogger();
 fprintf("Log level is %s\n", logger.level);
 logger.error("This should be logged");
 
-mlog.logging.clear();
+matlog.logging.clear();
 
 %% Section 2a Getting to know basicConfig
 % We can set the level, enable logging to file, and set the log format.
 % After running, check that a local file `example.log` has been created.
 % Notice how the log messages have gone to two different places: the console
 % and a file.
-import mlog.logging
+import matlog.logging
 logging.basicConfig('level', 'INFO', 'logfile', 'example.log');
 logger = logging.getLogger();
 fprintf("Log level is %s\n", logger.level);
@@ -54,7 +54,7 @@ logging.clear();
 % `s` in this case specifies the string-type formatting. (For numeric fields
 % like line number, change this to `d`).
 % Do not include anything in the form %(name) that isn't a valid field.
-import mlog.logging
+import matlog.logging
 formatStr = '%(asctime)s ~ %(filename)s[%(lineno)d]';
 logging.basicConfig('level', 'INFO', 'format', formatStr);
 logger = logging.getLogger();
@@ -68,7 +68,7 @@ logging.clear();
 % `LogHandler`s:a StreamHandler for the console output, and a FileHandler for
 % logging to file.
 % We can set the loggers manually, too.
-import mlog.logging mlog.StreamHandler
+import matlog.logging matlog.StreamHandler
 logger = logging.getLogger();
 % Initially there aren't any handlers and so the log messages will not go
 % anywhere.
@@ -102,7 +102,7 @@ logging.clear();
 %
 % We create a hierarchy of loggers with different levels.
 
-import mlog.logging mlog.StreamHandler mlog.LogLevel
+import matlog.logging matlog.StreamHandler matlog.LogLevel
 % basicConfig configures the root logger only.
 logging.basicConfig('level', 'WARNING');
 rootLogger = logging.getLogger();

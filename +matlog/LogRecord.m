@@ -36,8 +36,8 @@ classdef LogRecord < handle
             %LogRecord Construct an instance of this class f
             %   Detailed explanation goes here
             arguments
-                logger (1,1) mlog.Logger
-                level (1,1) mlog.LogLevel
+                logger (1,1) matlog.Logger
+                level (1,1) matlog.LogLevel
                 msg string
             end
             arguments(Repeating)
@@ -127,9 +127,9 @@ classdef LogRecord < handle
             res = obj.callerStack_;
             if ismissing(res)
                 stack = obj.stack;
-                % Check for the most recent file in stack before mlog module
+                % Check for the most recent file in stack before matlog module
                 filepaths = {stack.file};
-                inModule = cellfun(@(p) ismember('+mlog', split(p, filesep)), filepaths);
+                inModule = cellfun(@(p) ismember('+matlog', split(p, filesep)), filepaths);
                 iEntry = find(inModule, 1, 'last');
                 res = stack(iEntry + 1:end);
                 obj.callerStack_ = res;

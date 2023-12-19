@@ -25,11 +25,11 @@ classdef Logger < handle
         level
     end
 
-    properties (SetAccess = {?mlog.logging})
+    properties (SetAccess = {?matlog.logging})
         parent
     end
 
-    methods (Access = {?mlog.logging})
+    methods (Access = {?matlog.logging})
         function obj = Logger(name, parent, handlers, level)
             % Logger create a Logger instance. This can only be done by the
             % logging module. Use logging.getLogger.
@@ -52,13 +52,13 @@ classdef Logger < handle
         function addMsg(obj, level, msg, varargin)
             arguments
                 obj
-                level (1,1) mlog.LogLevel
+                level (1,1) matlog.LogLevel
                 msg string
             end
             arguments(Repeating)
                 varargin
             end
-            logRecord = mlog.LogRecord(obj, level, msg, varargin{:});
+            logRecord = matlog.LogRecord(obj, level, msg, varargin{:});
             obj.propagateRecord(logRecord);
         end
 
@@ -83,7 +83,7 @@ classdef Logger < handle
         function addHandler(obj, handler)
             arguments
                 obj
-                handler (1,1) mlog.LogHandler
+                handler (1,1) matlog.LogHandler
             end
             obj.handlers = [obj.handlers(:)' {handler}];
         end
@@ -109,42 +109,42 @@ classdef Logger < handle
             %trace log a message at level TRACE.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.TRACE, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.TRACE, msg, varargin{:});
         end
 
         function debug(obj, msg, varargin)
             %debug log a message at level DEBUG.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.DEBUG, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.DEBUG, msg, varargin{:});
         end
 
         function info(obj, msg, varargin)
             %info log a message at level INFO.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.INFO, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.INFO, msg, varargin{:});
         end
 
         function warning(obj, msg, varargin)
             %warning log a message at level WARNING.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.WARNING, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.WARNING, msg, varargin{:});
         end
 
         function error(obj, msg, varargin)
             %error log a message at level ERROR.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.ERROR, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.ERROR, msg, varargin{:});
         end
 
         function fatal(obj, msg, varargin)
             %fatal log a message at level FATAL.
             %Syntax as-per sprintf.
             %See also sprintf.
-            obj.addMsg(mlog.LogLevel.FATAL, msg, varargin{:});
+            obj.addMsg(matlog.LogLevel.FATAL, msg, varargin{:});
         end
         %%
         function exception(obj, exc, msg, options)

@@ -11,7 +11,7 @@ classdef (Abstract) LogHandler < handle
         dateFormat
     end
     properties(Constant)
-        DEFAULTLEVEL = mlog.LogLevel.ALL
+        DEFAULTLEVEL = matlog.LogLevel.ALL
     end
     properties (SetAccess=private)
         % formatFn format a LogRecord to string according to a specification in
@@ -41,9 +41,9 @@ classdef (Abstract) LogHandler < handle
             %  LogHandler(__, 'dateFormat', value) specifies the formatting of
             %  datetime fields in the log.
             arguments
-                options.level (1,1) mlog.LogLevel = mlog.LogHandler.DEFAULTLEVEL
-                options.format (1,1) string = mlog.logging.DEFAULTFORMAT
-                options.dateFormat (1,1) string = mlog.logging.DEFAULTDATEFORMAT
+                options.level (1,1) matlog.LogLevel = matlog.LogHandler.DEFAULTLEVEL
+                options.format (1,1) string = matlog.logging.DEFAULTFORMAT
+                options.dateFormat (1,1) string = matlog.logging.DEFAULTDATEFORMAT
             end
             obj.level = options.level;
             obj.format = options.format;
@@ -54,7 +54,7 @@ classdef (Abstract) LogHandler < handle
             %logRecord format and write the LogRecord.
             arguments
                 obj
-                record (1,1) mlog.LogRecord
+                record (1,1) matlog.LogRecord
             end
             if record.level >= obj.level
                 msgFormatted = obj.formatFn(obj, record);

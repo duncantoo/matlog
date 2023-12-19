@@ -6,7 +6,7 @@ classdef logging
         loggers = containers.Map
     end
     properties(Constant)
-        DEFAULTLEVEL = mlog.LogLevel.WARNING
+        DEFAULTLEVEL = matlog.LogLevel.WARNING
         DEFAULTFORMAT = "%(asctime)s - %(name)s - %(level)-7s - %(message)s"
         DEFAULTDATEFORMAT = "yyyy-MM-dd HH:mm:ss.SSS"
     end
@@ -22,17 +22,17 @@ classdef logging
             %  basicConfig(__, 'format', value) sets the log format used by the
             %handlers.
             arguments
-                options.level (1,1) mlog.LogLevel = mlog.logging.DEFAULTLEVEL
+                options.level (1,1) matlog.LogLevel = matlog.logging.DEFAULTLEVEL
                 options.logfile (1,1) string = missing
-                options.format (1,1) string = mlog.logging.DEFAULTFORMAT
+                options.format (1,1) string = matlog.logging.DEFAULTFORMAT
             end
-            mlog.logging.clear();
-            rootLogger = mlog.logging.getLogger();
+            matlog.logging.clear();
+            rootLogger = matlog.logging.getLogger();
             rootLogger.level = options.level;
-            streamHandler = mlog.StreamHandler('format', options.format);
+            streamHandler = matlog.StreamHandler('format', options.format);
             rootLogger.addHandler(streamHandler);
             if ~ismissing(options.logfile)
-                fileHandler = mlog.FileHandler(options.logfile,...
+                fileHandler = matlog.FileHandler(options.logfile,...
                     'format', options.format);
                 rootLogger.addHandler(fileHandler);
             end
@@ -52,10 +52,10 @@ classdef logging
             arguments
                 name (1,1) string = ""
             end
-            loggers = mlog.logging.loggers;
+            loggers = matlog.logging.loggers;
             if isempty(loggers)
-                loggers("") = mlog.Logger("root", missing, {},...
-                    mlog.logging.DEFAULTLEVEL);
+                loggers("") = matlog.Logger("root", missing, {},...
+                    matlog.logging.DEFAULTLEVEL);
             end
             if ismember(name, keys(loggers))
                 logger = loggers(name);
@@ -63,10 +63,10 @@ classdef logging
                 % Construct a new logger and track it for anyone who needs
                 % access to the logger again. Also reset parent linking in
                 % case it is parent to any pre-existing loggers.
-                logger = mlog.Logger(name, missing, [], missing);
+                logger = matlog.Logger(name, missing, [], missing);
                 loggers(name) = logger;
                 names = string(keys(loggers));
-                iParents = mlog.logging.findParents(names, names);
+                iParents = matlog.logging.findParents(names, names);
                 for iChild = 1:length(loggers)
                     iParent = iParents(iChild);
                     if isnan(iParent)
@@ -108,7 +108,7 @@ classdef logging
 
         function clear()
             %CLEAR delete all loggers and reset tree.
-            loggers = mlog.logging.loggers;
+            loggers = matlog.logging.loggers;
             for key_ = keys(loggers)
                 key = key_{:};
                 loggers(key).close();

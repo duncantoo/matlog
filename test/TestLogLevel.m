@@ -8,11 +8,11 @@ classdef TestLogLevel < matlab.unittest.TestCase
 
     methods(Test)
         function testErrorBiggerThanWarning(testCase)
-            testCase.verifyGreaterThan(mlog.LogLevel.ERROR, mlog.LogLevel.WARNING);
+            testCase.verifyGreaterThan(matlog.LogLevel.ERROR, matlog.LogLevel.WARNING);
         end
 
         function testLevelsEqualToSelf(testCase)
-            for level = enumeration(?mlog.LogLevel)'
+            for level = enumeration(?matlog.LogLevel)'
                 testCase.verifyEqual(level, level);
             end
         end
@@ -20,7 +20,7 @@ classdef TestLogLevel < matlab.unittest.TestCase
         function testLevelsInOrder(testCase)
             % Highest to lowest
             levelPrev = missing;
-            for level = enumeration(?mlog.LogLevel)'
+            for level = enumeration(?matlog.LogLevel)'
                 if ~ismissing(levelPrev)
                     testCase.verifyLessThan(level, levelPrev);
                 end

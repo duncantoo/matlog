@@ -5,7 +5,7 @@ classdef TestFileHandler < LogFileTestCase
         function testFileCreation(testCase)
             % test the log file is created.
             testCase.verifyFalse(logical(exist(testCase.filepath, 'file')));
-            mlog.FileHandler(testCase.filepath);
+            matlog.FileHandler(testCase.filepath);
             testCase.verifyTrue(logical(exist(testCase.filepath, 'file')));
         end
 
@@ -20,7 +20,7 @@ classdef TestFileHandler < LogFileTestCase
                 'author', 'JK Rowling'...
             );
 
-            handler = mlog.FileHandler(testCase.filepath, 'format', formatStr);
+            handler = matlog.FileHandler(testCase.filepath, 'format', formatStr);
             output = handler.formatFn(handler, data);
 
             expected = "Harry Potter no5 by JK Rowling";
@@ -28,9 +28,9 @@ classdef TestFileHandler < LogFileTestCase
         end
 
         function testLevelFilter(testCase)
-            logger = mlog.logging.getLogger();
-            logger.level = mlog.LogLevel.ALL;
-            handler = mlog.FileHandler(testCase.filepath, 'level', 'WARN',...
+            logger = matlog.logging.getLogger();
+            logger.level = matlog.LogLevel.ALL;
+            handler = matlog.FileHandler(testCase.filepath, 'level', 'WARN',...
                 'format', '%(message)s');
             logger.addHandler(handler);
             logger.warning("This should be logged");
