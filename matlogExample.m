@@ -81,6 +81,7 @@ logger.error("Now we have a logger we can see the message");
 % the time is represented.
 % The handlers have their own log level filter which operate in addition to the
 % logger's level. By default they allow all levels.
+% By default StreamHandlers log to stdout.
 handler2 = StreamHandler('format', '%(asctime)s %(level)s: %(message)s',...
     'dateFormat', 'yyyy MMM dd - HHmmss', 'level', 'ERROR');
 logger.addHandler(handler2);
@@ -104,8 +105,8 @@ logging.clear();
 
 import matlog.logging matlog.StreamHandler matlog.LogLevel
 % basicConfig configures the root logger only.
-logging.basicConfig('level', 'WARNING');
 rootLogger = logging.getLogger();
+fatherLogger.level = LogLevel.WARNING;
 
 fatherLogger = logging.getLogger('father');
 fatherLogger.level = LogLevel.INFO;
@@ -117,6 +118,8 @@ daughterLogger.level = LogLevel.ALL;
 display([rootLogger.name fatherLogger.name daughterLogger.name]);
 display([rootLogger.parent fatherLogger.parent.name daughterLogger.parent.name]);
 
+% root logs to stderr and the others to stdout.
+rootLogger.addHandler(StreamHandler(2));
 fatherLogger.addHandler(StreamHandler());
 daughterLogger.addHandler(StreamHandler());
 
