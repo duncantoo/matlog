@@ -5,22 +5,21 @@ classdef TestFileHandler < LogFileTestCase
         function testFileCreation(testCase)
             % test the log file is created.
             testCase.verifyFalse(logical(exist(testCase.filepath, 'file')));
-            mlog.FileHandler(testCase.filepath);
+            matlog.FileHandler(testCase.filepath);
             testCase.verifyTrue(logical(exist(testCase.filepath, 'file')));
         end
 
         function testFormatter(testCase)
-            % Use dummy format string with makeshift struct.
-            % The struct needs the fields specified in the format string.
-            % Check the resulting formatted output is correct.
-            formatStr = "%(title)s no%(number)d by %(author)s";
+            % We use a makeshift struct instead of LogRecord. However, we need
+            % to ensure the properties are valid formatFields for LogRecord.
+            formatStr = "%(funcName)s no%(lineno)d by %(filename)s";
             data = struct(...
-                'title', 'Harry Potter',...
-                'number', 5,...
-                'author', 'JK Rowling'...
+                'funcName', 'Harry Potter',...
+                'lineno', 5,...
+                'filename', 'JK Rowling'...
             );
 
-            handler = mlog.FileHandler(testCase.filepath, 'format', formatStr);
+            handler = matlog.FileHandler(testCase.filepath, 'format', formatStr);
             output = handler.formatFn(handler, data);
 
             expected = "Harry Potter no5 by JK Rowling";
@@ -28,9 +27,9 @@ classdef TestFileHandler < LogFileTestCase
         end
 
         function testLevelFilter(testCase)
-            logger = mlog.logging.getLogger();
-            logger.level = mlog.LogLevel.ALL;
-            handler = mlog.FileHandler(testCase.filepath, 'level', 'WARN',...
+            logger = matlog.logging.getLogger();
+            logger.level = matlog.LogLevel.ALL;
+            handler = matlog.FileHandler(testCase.filepath, 'level', 'WARN',...
                 'format', '%(message)s');
             logger.addHandler(handler);
             logger.warning("This should be logged");

@@ -5,7 +5,7 @@ classdef TestLogging < LogFileTestCase
 
         function testBasicConfigLevel(testCase)
             % Check the level property of the root logger is set properly.
-            for level = enumeration(?mlog.LogLevel)'
+            for level = enumeration(?matlog.LogLevel)'
                 logging.basicConfig('level', level);
                 logger = logging.getLogger();
                 testCase.verifyEqual(logger.level, level);
@@ -15,9 +15,9 @@ classdef TestLogging < LogFileTestCase
         function testBasicConfigFormat(testCase)
             % Check basicConfig sets the log format properly.
             format = "%(level)s: hello %(message)s!";
-            mlog.logging.basicConfig('level', 'ALL', 'format', format, ...
+            matlog.logging.basicConfig('level', 'ALL', 'format', format, ...
                 'logfile', testCase.filepath);
-            logger = mlog.logging.getLogger();
+            logger = matlog.logging.getLogger();
             logger.info("world");
             logger.close();
 
@@ -28,26 +28,26 @@ classdef TestLogging < LogFileTestCase
             % Create hierarchy of loggers.
             % Check that upon running logging.clear the loggers no longer work
             % and the hierarchy is clear.
-            mlog.logging.basicConfig('logfile', testCase.filepath,...
+            matlog.logging.basicConfig('logfile', testCase.filepath,...
                 'format', '%(message)s');
 
             % Create root and 1st level
-            logger_root = mlog.logging.getLogger();
-            logger_a = mlog.logging.getLogger("a");
-            logger_b = mlog.logging.getLogger("a.b");
+            logger_root = matlog.logging.getLogger();
+            logger_a = matlog.logging.getLogger("a");
+            logger_b = matlog.logging.getLogger("a.b");
             testCase.verifyEqual(logger_b.parent, logger_a);
 
             logger_b.error('First message');
-            mlog.logging.clear();
+            matlog.logging.clear();
             logger_b.error('Second message');
             testCase.verifyLogfileEqual('First message');
 
-            mlog.logging.basicConfig('logfile', testCase.filepath);
-            logger_root2 = mlog.logging.getLogger();
+            matlog.logging.basicConfig('logfile', testCase.filepath);
+            logger_root2 = matlog.logging.getLogger();
 
             testCase.verifyNotEqual(logger_root, logger_root2);
-            logger_a2 = mlog.logging.getLogger("a");
-            logger_b2 = mlog.logging.getLogger("a.b");
+            logger_a2 = matlog.logging.getLogger("a");
+            logger_b2 = matlog.logging.getLogger("a.b");
             testCase.verifyEqual(logger_b2.parent, logger_a2);
             testCase.verifyNotEqual(logger_b2.parent, logger_a);
         end

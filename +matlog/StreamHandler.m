@@ -1,4 +1,4 @@
-classdef StreamHandler < mlog.LogHandler
+classdef StreamHandler < matlog.LogHandler
     %STREAMHANDLER stream logs to IO streams.
     %
     %See also LogHandler.
@@ -29,13 +29,13 @@ classdef StreamHandler < mlog.LogHandler
             parser = inputParser();
             parser.KeepUnmatched = true;
             parser.addOptional(...
-                'streamID', mlog.StreamHandler.DEAFULTIOSTREAM,...
+                'streamID', matlog.StreamHandler.DEAFULTIOSTREAM,...
                 @(x) ismember(x, [1,2])...
             );
             parse(parser, varargin{:});
             unmatched = namedargs2cell(parser.Unmatched);
 
-            obj@mlog.LogHandler(unmatched{:});
+            obj@matlog.LogHandler(unmatched{:});
             obj.streamID = parser.Results.streamID;
         end
 
