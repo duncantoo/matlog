@@ -1,6 +1,7 @@
 # matlog
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![View matlog on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/156642-matlog)
 
 Use `matlog` for customisable logging within MATLAB styled on the Python module [`logging`](https://docs.python.org/3/library/logging.html).
 
@@ -159,3 +160,5 @@ daughterLogger.debug("This message is logged by only daughter");
   2023-12-19 13:30:25.414 - father - INFO    - This message is logged by only father and daughter
   2023-12-19 13:30:25.421 - father.daughter - DEBUG   - This message is logged by only daughter
 ```
+
+<img src="logo.png" alt="image" width="400" height="auto">
