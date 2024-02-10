@@ -168,7 +168,7 @@ classdef Logger < handle
                 msg (1,1) string = ""
                 options.splitlines (1,1) logical = false
             end
-            traceback = string(exc.getReport());
+            traceback = string(exc.getReport('extended', 'hyperlinks','off'));
             lines = [msg; "Traceback:"; splitlines(traceback)];
             % Remove empty lines
             lines = lines(strlength(strip(lines)) > 0);
