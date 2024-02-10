@@ -19,6 +19,8 @@ jobs:
       matrix:
         # Run on a variety of releases
         release: [R2021b, R2022a, R2023a, R2023b]
+      # Keep running other releases even if one fails.
+      fail-fast: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
