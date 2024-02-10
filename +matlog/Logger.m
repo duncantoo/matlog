@@ -67,7 +67,7 @@ classdef Logger < handle
                 for iHandler = 1:length(obj.handlers)
                     obj.handlers{iHandler}.logRecord(record);
                 end
-                if ~ismissing(obj.parent)
+                if isa(obj.parent, 'matlog.Logger')
                     record.logger = obj.parent;
                     obj.parent.propagateRecord(record);
                 end
