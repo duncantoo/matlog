@@ -2,6 +2,7 @@ classdef FileHandler < matlog.LogHandler
     %FILEHANDLER stream logs to file.
     properties(SetAccess=protected)
         fileID = -1
+        filepath
     end
 
     methods
@@ -30,6 +31,7 @@ classdef FileHandler < matlog.LogHandler
 
             obj@matlog.LogHandler(unmatched{:});
             obj.fileID = fopen(filepath, parser.Results.filemode);
+            obj.filepath = filepath;
         end
 
         function delete(obj)
@@ -37,8 +39,15 @@ classdef FileHandler < matlog.LogHandler
         end
 
         function writeMessage(obj, msgStr)
-            fprintf(obj.fileID, msgStr + newline);
+            % Use format string to directly write our already-formatted message
+            % which allows us to print special symbols like %.
+            fprintf(obj.fileID, '%s\n', msgStr);
         end
     end
 end
 
+function mustBeText(x)
+    if ~(isa(x, 'string') || isa(x, 'char'))
+        error("Value of Data property must be string or char.")
+    end
+end

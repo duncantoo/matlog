@@ -86,6 +86,15 @@ classdef TestLogger < LogFileTestCase
             % The error message is in the first few lines of log with the level
             testCase.verifyTrue(ismember("ERROR - Throw an exception", lines(1:5)));
         end
+
+        function testPercentageEscape(testCase)
+            % Test we can log % symbol with %%.
+            matlog.logging.basicConfig('logfile', testCase.filepath, ...
+                'format', '%(message)s');
+            logger = matlog.logging.getLogger();
+            logger.warning('100%% logged');
+            testCase.verifyLogfileEqual("100% logged");
+        end
     end
 
 end

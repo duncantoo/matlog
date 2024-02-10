@@ -40,7 +40,9 @@ classdef StreamHandler < matlog.LogHandler
         end
 
         function writeMessage(obj, msgStr)
-            fprintf(obj.streamID, msgStr + newline);
+            % Use format string to directly write our already-formatted message
+            % which allows us to print special symbols like %.
+            fprintf(obj.streamID, '%s\n', msgStr);
         end
     end
 end
