@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         # Run on a variety of releases
-        release: [R2023a, R2023b]
+        release: [R2021a, R2022a, R2023a, R2023b]
       # Keep running other releases even if one fails.
       fail-fast: false
 
