@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         # Run on a variety of releases
-        release: [R2020a, R2021a, R2022a, R2023a]
+        release: [R2023a, R2023b]
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
