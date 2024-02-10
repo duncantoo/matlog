@@ -1,5 +1,5 @@
 %matlog
-%Version 1.0.0 18-Dec-2023
+%Version 1.1.0 10-Feb-2024
 %
 %Overview:
 %  logging         - main user interface for creating and customising loggers
