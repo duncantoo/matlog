@@ -103,8 +103,10 @@ classdef LogRecord < handle
                 obj.message_ = res;
             end
         end
+    end
 
-        %% 'Getters' for protected properties
+    %% Phony 'getters' for protected properties
+    methods
         function res = stack(obj)
             res = obj.stack_;
             if ismissing(res)

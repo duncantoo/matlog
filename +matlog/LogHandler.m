@@ -71,14 +71,15 @@ classdef (Abstract) LogHandler < handle
                 formatStr (1,1) string
             end
             obj.format_ = formatStr;
-            allowedFields = matlog.LogRecord.formatFields;
+            allowedFields = string(matlog.LogRecord.formatFields);
 
             [tokens, tokenExtents] = regexp(...
                 formatStr, "%\((\w+)\)", 'tokens', 'tokenExtents');
+            tokens = string(tokens);
 
             % Check if the tokens are valid formatFields.
             isValid = cellfun(@(x) ismember(x, allowedFields), tokens);
-            tokens = tokens(isValid);
+            goodTokens = tokens(isValid);
             tokenExtents = tokenExtents(isValid);
             % Convert the input format string to a valid MATLAB format string
             % by removing the (fieldname) part.
@@ -88,9 +89,9 @@ classdef (Abstract) LogHandler < handle
                 matlabFmt = eraseBetween(matlabFmt, ext(1) - 1, ext(2) + 1);
             end
             function msgFormatted = formatFn(obj, record)
-                recordFields = cell(length(tokens), 1);
-                for ii = 1:length(tokens)
-                    fieldName = tokens{ii};
+                recordFields = cell(length(goodTokens), 1);
+                for ii = 1:length(goodTokens)
+                    fieldName = goodTokens{ii};
                     val = record.(fieldName);
                     if isdatetime(val)
                         val = string(val, obj.dateFormat);
@@ -100,6 +101,16 @@ classdef (Abstract) LogHandler < handle
                 msgFormatted = sprintf(matlabFmt, recordFields{:});
             end
             obj.formatFn = @formatFn;
+            % Warn about failed tokens
+            badTokens = tokens(~isValid);
+            if ~isempty(badTokens)
+                warning(...
+                    ['The following log format tokens are not understood: ' ...
+                    '%s\nA complete list is: %s'], ...
+                    join(badTokens, ', '), ...
+                    join(allowedFields, ', ')...
+                );
+            end
         end
     end
 
