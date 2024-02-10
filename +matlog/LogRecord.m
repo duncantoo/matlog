@@ -115,7 +115,7 @@ classdef LogRecord < handle
 
         function res = callerStack(obj)
             res = obj.callerStack_;
-            if ismissing(res)
+            if ~isstruct(res)
                 stack = obj.stack;
                 % Check for the most recent file in stack before matlog module
                 filepaths = {stack.file};
@@ -126,7 +126,7 @@ classdef LogRecord < handle
             end
         end
     end
-    
+
     %% Setters and getters
     methods
         function res = get.levelname(obj)
