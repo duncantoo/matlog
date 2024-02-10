@@ -32,6 +32,16 @@ classdef TestFormatting < LogFileTestCase
             testCase.verifyLogfileEqual("INFO: hello world!");
         end
 
+        function testBadToken(testCase)
+            % Check a MATLAB warning is thrown if a bad format token is passed.
+            expectedWarning = 'matlog:LogHandler:invalidFormatter';
+            format = "%(BADTOKEN)s";
+            testCase.verifyWarning(...
+                @() matlog.StreamHandler('format', format), ...
+                expectedWarning ...
+            );
+        end
+
         function testClear(testCase)
             % Create hierarchy of loggers.
             % Check that upon running logging.clear the loggers no longer work
