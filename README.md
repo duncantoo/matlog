@@ -62,6 +62,29 @@ This will also log to the console output.
 
 Use `logging.clear()` to stop any future logging from existing `Logger` instances.
 
+## Special characters
+
+To log certain escape characters such as `'%'` and `'\'` you should follow advice from
+[MATLAB Operators and Special Characters](https://uk.mathworks.com/help/matlab/matlab_prog/matlab-operators-and-special-characters.html)
+, entering them as `'%%'` and `'\\'` respectively.
+
+For example, to log `'100% complete'`, enter instead
+```matlab
+import matlog.logging
+logging.basicConfig('level', 'INFO');
+logger = logging.getLogger();
+logger.info('100%% complete');
+```
+⏎
+```
+2023-12-19 12:37:12.430 - root - INFO - 100% complete
+```
+
+You can alternatively make use of string formatting using:
+```matlab
+logger.info('%s', '100% complete');
+```
+
 ## Advanced features
 
 ### `LogHandler`
@@ -70,7 +93,7 @@ The `LogHandler` gives access to:
 - Formatting logs
 - Formatting datetimes
 - Logging to stdout or stderr
-- Logging to mulitple places simultaneously
+- Logging to multiple places simultaneously
 
 Earlier we saw enabling the `logfile` in `basicConfig` results in messages being logged to two places.
 

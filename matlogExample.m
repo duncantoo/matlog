@@ -130,3 +130,18 @@ daughterLogger.info("This message is logged by only father and daughter");
 daughterLogger.debug("This message is logged by only daughter");
 
 logging.clear();
+
+%% Section 5 Special characters
+% To log certain escape characters such as `'%'` and `'\'` you should enter them
+% as `'%%'` and `'\\'` respectively.
+import matlog.logging
+logging.basicConfig('level', 'INFO');
+logger = logging.getLogger();
+logger.info('50%% complete');
+
+% You can alternatively make use of string formatting:
+logger.info('%s', '100% complete');
+
+% Now for paths:
+logger.info('C:\\User\\me');
+logger.info('%s', 'C:\User\you');

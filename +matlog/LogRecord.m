@@ -97,6 +97,8 @@ classdef LogRecord < handle
         end
 
         function res = message(obj)
+            % MESSAGE format the msg string with any additional
+            % arguments.
             res = obj.message_;
             if ismissing(res)
                 res = sprintf(obj.msg, obj.args{:});
